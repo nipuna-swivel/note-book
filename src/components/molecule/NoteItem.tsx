@@ -4,8 +4,9 @@ import {
   ChevronRight,
   Plus,
   Trash2,
-  FileText,
+
 } from "lucide-react";
+import PageItem from "../atom/PageItem";
 
 // Define types for Page and Note
 interface Page {
@@ -67,31 +68,14 @@ const NoteItem: React.FC<NoteItemProps> = ({
       {isExpanded && (
         <div className="p-3 space-y-2">
           {note.pages.map((page) => (
-            <div
-              key={page.id}
-              className="flex justify-between items-center group cursor-pointer rounded-md px-2 py-1 hover:bg-gray-50 transition"
-            >
-              <div
-                onClick={() => {
-                  setSelectedNote(note);
-                  setSelectedPage(page);
-                }}
-                className="flex items-center gap-2 text-gray-700 hover:text-blue-600 w-full"
-              >
-                <FileText size={16} />
-                <span>{page.title}</span>
-              </div>
-
-              {/* Delete Page Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeletePage({ noteId: note.id, pageId: page.id });
-                }}
-                className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 transition"
-              >
-                <Trash2 size={15} />
-              </button>
+            <div key={page.id}>
+              <PageItem
+                note={note}
+                page={page}
+                handleDeletePage={handleDeletePage}
+                setSelectedNote={setSelectedNote}
+                setSelectedPage={setSelectedPage}
+              />
             </div>
           ))}
 

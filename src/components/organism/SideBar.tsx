@@ -52,7 +52,7 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
     );
   };
 
-  const handleDeleteNote = (id: any) => {
+  const handleDeleteNote = (id: number) => {
     setNotes(notes.filter((note) => note.id !== id));
     setSelectedNote(null);
     setSelectedPage(null);
@@ -83,13 +83,13 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
       <div className="md:hidden flex justify-between items-center p-4 border-b bg-white sticky top-0 z-20">
         <div className="text-lg font-semibold">Notes</div>
         <div className="flex items-center gap-3">
-          <button
+          {/* <button
             onClick={handleLogin}
             className="flex items-center gap-1 text-sm font-medium bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600"
           >
             <LogIn size={16} />
             Login
-          </button>
+          </button> */}
           <button onClick={() => setIsOpen(!isOpen)}>
             <Menu size={24} />
           </button>
@@ -108,7 +108,7 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
         <div className="flex justify-between items-center mb-6">
           <button
             onClick={() => router.push("/login")}
-            className="flex items-center gap-2 text-sm font-medium bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
+            className=" flex items-center gap-2 text-sm font-medium bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
           >
             <CircleUser />
             Login
@@ -139,7 +139,7 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-10 md:hidden"
+          className="fixed inset-0 bg-white bg-opacity-40 z-10 md:hidden"
           onClick={() => setIsOpen(false)}
         ></div>
       )}
