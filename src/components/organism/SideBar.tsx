@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { Plus, Menu, Trash2, FileText } from "lucide-react";
+import { Menu, Plus } from "lucide-react";
+import NoteList from "../molecule/NoteList";
+import { INote } from "@/types/Note";
 
-function SideBar({ setSelectedNote, setSelectedPage }) {
+function SideBar({ setSelectedNote, setSelectedPage }:any) {
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState([
     {
@@ -16,6 +18,7 @@ function SideBar({ setSelectedNote, setSelectedPage }) {
 
   const [expandedNoteId, setExpandedNoteId] = useState(null);
 
+  // Handlers
   const handleAddNote = () => {
     const newNote = {
       id: Date.now(),
@@ -28,7 +31,7 @@ function SideBar({ setSelectedNote, setSelectedPage }) {
     setSelectedPage(newNote.pages[0]);
   };
 
-  const handleAddPage = (noteId) => {
+  const handleAddPage = (noteId:any) => {
     setNotes((prev) =>
       prev.map((note) =>
         note.id === noteId
@@ -48,13 +51,13 @@ function SideBar({ setSelectedNote, setSelectedPage }) {
     );
   };
 
-  const handleDeleteNote = (id) => {
+  const handleDeleteNote = (id:any) => {
     setNotes(notes.filter((note) => note.id !== id));
     setSelectedNote(null);
     setSelectedPage(null);
   };
 
-  const handleDeletePage = (noteId, pageId) => {
+  const handleDeletePage = ({noteId, pageId}:any) => {
     setNotes((prev) =>
       prev.map((note) =>
         note.id === noteId
@@ -65,13 +68,13 @@ function SideBar({ setSelectedNote, setSelectedPage }) {
     setSelectedPage(null);
   };
 
-  const toggleExpandNote = (id) => {
+  const toggleExpandNote = (id:any) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
   };
 
   return (
     <>
-      {/* Mobile header */}
+      {/* Mobile Header */}
       <div className="md:hidden flex justify-between items-center p-4 border-b bg-white sticky top-0 z-20">
         <div className="text-lg font-semibold">Notes</div>
         <button onClick={() => setIsOpen(!isOpen)}>
@@ -87,6 +90,7 @@ function SideBar({ setSelectedNote, setSelectedPage }) {
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 w-3/4 sm:w-2/5 md:w-1/4 p-4 z-30`}
       >
+        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold">Notes</h2>
           <button
@@ -97,71 +101,17 @@ function SideBar({ setSelectedNote, setSelectedPage }) {
           </button>
         </div>
 
-        <div className="space-y-2 overflow-y-auto h-[80vh]">
-          {notes.map((note) => (
-            <div key={note.id}>
-              {/* Note Header */}
-              <div
-                onClick={() => {
-                  toggleExpandNote(note.id);
-                  setSelectedNote(note);
-                }}
-                className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer"
-              >
-                <span className="font-medium truncate">{note.title}</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddPage(note.id);
-                    }}
-                    className="text-gray-500 hover:text-blue-600"
-                    title="Add page"
-                  >
-                    <Plus size={16} />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteNote(note.id);
-                    }}
-                    className="text-gray-500 hover:text-red-600"
-                    title="Delete note"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Pages list */}
-              {expandedNoteId === note.id && (
-                <div className="ml-4 space-y-1 border-l pl-3">
-                  {note.pages.map((page) => (
-                    <div
-                      key={page.id}
-                      onClick={() => setSelectedPage(page)}
-                      className="flex justify-between items-center p-2 rounded-md hover:bg-gray-50 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FileText size={14} />
-                        <span className="text-sm truncate">{page.title}</span>
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeletePage(note.id, page.id);
-                        }}
-                        className="text-gray-400 hover:text-red-500"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        {/* Notes List */}
+        <NoteList
+          notes={notes}
+          expandedNoteId={expandedNoteId}
+          toggleExpandNote={toggleExpandNote}
+          handleAddPage={handleAddPage}
+          handleDeleteNote={handleDeleteNote}
+          handleDeletePage={handleDeletePage}
+          setSelectedNote={setSelectedNote}
+          setSelectedPage={setSelectedPage}
+        />
       </div>
 
       {/* Overlay for mobile */}

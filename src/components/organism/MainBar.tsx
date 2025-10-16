@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-function MainBar({ selectedNote, selectedPage }) {
+function MainBar({ selectedNote, selectedPage }:any) {
   const [page, setPage] = useState(null);
 
   useEffect(() => {
@@ -18,11 +18,12 @@ function MainBar({ selectedNote, selectedPage }) {
   if (!page)
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
-        Select or create a page within <strong className="ml-1">{selectedNote.title}</strong>
+        Select or create a page within{" "}
+        <strong className="ml-1">{selectedNote.title}</strong>
       </div>
     );
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setPage({ ...page, [e.target.name]: e.target.value });
   };
 

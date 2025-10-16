@@ -4,9 +4,9 @@ import SideBar from "../organism/SideBar";
 import MainBar from "../organism/MainBar";
 
 function NoteBook() {
-    const [selectedNote, setSelectedNote] = useState(null);
+  const [selectedNote, setSelectedNote] = useState(null);
   const [selectedPage, setSelectedPage] = useState(null);
-   return (
+  return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50">
       <SideBar
         setSelectedNote={setSelectedNote}
