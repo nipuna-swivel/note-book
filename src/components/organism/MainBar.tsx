@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-function MainBar({ selectedNote, selectedPage }:any) {
+function MainBar({ selectedNote, selectedPage }: any) {
   const [page, setPage] = useState(null);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ function MainBar({ selectedNote, selectedPage }:any) {
   if (!selectedNote)
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
-        Select or create a note 
+        Select or create a note
       </div>
     );
 

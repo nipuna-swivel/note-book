@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Menu, Plus, LogIn } from "lucide-react";
+import { Menu, Plus, LogIn, CircleUser } from "lucide-react";
 import NoteList from "../molecule/NoteList";
 import { useRouter } from "next/navigation";
 
@@ -110,7 +110,7 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
             onClick={() => router.push("/login")}
             className="flex items-center gap-2 text-sm font-medium bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
           >
-            
+            <CircleUser />
             Login
           </button>
           <button

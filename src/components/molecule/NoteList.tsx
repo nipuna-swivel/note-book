@@ -1,7 +1,30 @@
 import React from "react";
 import NoteItem from "./NoteItem";
 
-function NoteList({
+// Reuse the same interfaces used in NoteItem
+interface Page {
+  id: number;
+  title: string;
+}
+
+interface Note {
+  id: number;
+  title: string;
+  pages: Page[];
+}
+
+interface NoteListProps {
+  notes: Note[];
+  expandedNoteId: number | null;
+  toggleExpandNote: (noteId: number) => void;
+  handleAddPage: (noteId: number) => void;
+  handleDeleteNote: (noteId: number) => void;
+  handleDeletePage: (ids: { noteId: number; pageId: number }) => void;
+  setSelectedNote: (note: Note) => void;
+  setSelectedPage: (page: Page) => void;
+}
+
+const NoteList: React.FC<NoteListProps> = ({
   notes,
   expandedNoteId,
   toggleExpandNote,
@@ -10,7 +33,7 @@ function NoteList({
   handleDeletePage,
   setSelectedNote,
   setSelectedPage,
-}) {
+}) => {
   return (
     <div className="space-y-2 overflow-y-auto h-[80vh]">
       {notes.map((note) => (
@@ -28,6 +51,7 @@ function NoteList({
       ))}
     </div>
   );
-}
+};
 
 export default NoteList;
+
