@@ -1,12 +1,8 @@
+"use client";
 import React from "react";
-import {
-  ChevronDown,
-  ChevronRight,
-  Plus,
-  Trash2,
-
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import PageItem from "../atom/PageItem";
+import NoteHeader from "../atom/NoteHeader";
 
 // Define types for Page and Note
 interface Page {
@@ -45,24 +41,13 @@ const NoteItem: React.FC<NoteItemProps> = ({
   return (
     <div className="border rounded-lg">
       {/* Note Header */}
-      <div
-        className="flex justify-between items-center p-3 bg-gray-100 rounded-t-lg cursor-pointer hover:bg-gray-200 transition"
-        onClick={() => toggleExpandNote(note.id)}
-      >
-        <div className="flex items-center gap-2">
-          {isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-          <span className="font-medium">{note.title}</span>
-        </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteNote(note.id);
-          }}
-          className="text-red-500 hover:text-red-700 transition"
-        >
-          <Trash2 size={16} />
-        </button>
-      </div>
+
+      <NoteHeader
+        note={note}
+        isExpanded={isExpanded}
+        toggleExpandNote={toggleExpandNote}
+        handleDeleteNote={handleDeleteNote}
+      />
 
       {/* Pages List */}
       {isExpanded && (
