@@ -1,7 +1,7 @@
 import React from "react";
 import { FileText, Trash2 } from "lucide-react";
 
-function PageItem({ page, noteId, handleDeletePage, setSelectedPage }) {
+function PageItem({ page, noteId, handleDeletePage, setSelectedPage }:any) {
   return (
     <div
       onClick={() => setSelectedPage(page)}

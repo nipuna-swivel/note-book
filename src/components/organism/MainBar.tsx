@@ -11,7 +11,7 @@ function MainBar({ selectedNote, selectedPage }:any) {
   if (!selectedNote)
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
-        Select or create a note 📝
+        Select or create a note 
       </div>
     );
 

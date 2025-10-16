@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import SideBar from "../organism/SideBar";
 import MainBar from "../organism/MainBar";
+//import HeaderBar from "../molecule/HeaderBar";
 
 function NoteBook() {
   const [selectedNote, setSelectedNote] = useState(null);

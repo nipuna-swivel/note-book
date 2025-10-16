@@ -11,7 +11,7 @@ function NoteItem({
   handleDeletePage,
   setSelectedNote,
   setSelectedPage,
-}) {
+}:any) {
   return (
     <div>
       {/* Note Header */}
