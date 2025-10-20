@@ -2,11 +2,26 @@
 import React, { useState } from "react";
 import SideBar from "../organism/SideBar";
 import MainBar from "../organism/MainBar";
-//import HeaderBar from "../molecule/HeaderBar";
 
-function NoteBook() {
-  const [selectedNote, setSelectedNote] = useState(null);
-  const [selectedPage, setSelectedPage] = useState(null);
+// Reuse shared types
+interface Page {
+  id: number;
+  title: string;
+  content: string;
+}
+
+interface Note {
+  id: number;
+  title: string;
+  pages: Page[];
+}
+
+
+
+const NoteBook: React.FC = () => {
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [selectedPage, setSelectedPage] = useState<Page | null>(null);
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50">
       <SideBar
@@ -18,6 +33,6 @@ function NoteBook() {
       </div>
     </div>
   );
-}
+};
 
 export default NoteBook;

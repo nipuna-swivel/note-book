@@ -1,13 +1,35 @@
 "use client";
 import React, { useState } from "react";
-import { Menu, Plus, LogIn, CircleUser } from "lucide-react";
+import { Menu, Plus, CircleUser } from "lucide-react";
 import NoteList from "../molecule/NoteList";
 import { useRouter } from "next/navigation";
 
-function SideBar({ setSelectedNote, setSelectedPage }: any) {
+// Define types for Page and Note
+interface Page {
+  id: number;
+  title: string;
+  content: string;
+}
+
+interface Note {
+  id: number;
+  title: string;
+  pages: Page[];
+}
+
+// Props expected by the SideBar component
+interface SideBarProps {
+  setSelectedNote: React.Dispatch<React.SetStateAction<Note | null>>;
+  setSelectedPage: React.Dispatch<React.SetStateAction<Page | null>>;
+}
+
+const SideBar: React.FC<SideBarProps> = ({
+  setSelectedNote,
+  setSelectedPage,
+}) => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [notes, setNotes] = useState([
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [notes, setNotes] = useState<Note[]>([
     {
       id: 1,
       title: "My First Note",
@@ -16,12 +38,11 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
       ],
     },
   ]);
+  const [expandedNoteId, setExpandedNoteId] = useState<number | null>(null);
 
-  const [expandedNoteId, setExpandedNoteId] = useState(null);
-
-  // Handlers
+  // Add a new note
   const handleAddNote = () => {
-    const newNote = {
+    const newNote: Note = {
       id: Date.now(),
       title: `New Note ${notes.length + 1}`,
       pages: [{ id: 1, title: "Page 1", content: "" }],
@@ -32,7 +53,8 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
     setSelectedPage(newNote.pages[0]);
   };
 
-  const handleAddPage = (noteId: any) => {
+  // Add a new page inside a note
+  const handleAddPage = (noteId: number) => {
     setNotes((prev) =>
       prev.map((note) =>
         note.id === noteId
@@ -52,13 +74,21 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
     );
   };
 
+  // Delete a note
   const handleDeleteNote = (id: number) => {
     setNotes(notes.filter((note) => note.id !== id));
     setSelectedNote(null);
     setSelectedPage(null);
   };
 
-  const handleDeletePage = ({ noteId, pageId }: any) => {
+  // Delete a page
+  const handleDeletePage = ({
+    noteId,
+    pageId,
+  }: {
+    noteId: number;
+    pageId: number;
+  }) => {
     setNotes((prev) =>
       prev.map((note) =>
         note.id === noteId
@@ -69,12 +99,9 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
     setSelectedPage(null);
   };
 
-  const toggleExpandNote = (id: any) => {
+  // ⬇️ Expand / collapse a note
+  const toggleExpandNote = (id: number) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
-  };
-
-  const handleLogin = () => {
-    router.push("/login"); // Uncomment when routing
   };
 
   return (
@@ -83,13 +110,6 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
       <div className="md:hidden flex justify-between items-center p-4 border-b bg-white sticky top-0 z-20">
         <div className="text-lg font-semibold">Notes</div>
         <div className="flex items-center gap-3">
-          {/* <button
-            onClick={handleLogin}
-            className="flex items-center gap-1 text-sm font-medium bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600"
-          >
-            <LogIn size={16} />
-            Login
-          </button> */}
           <button onClick={() => setIsOpen(!isOpen)}>
             <Menu size={24} />
           </button>
@@ -104,15 +124,15 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 w-3/4 sm:w-2/5 md:w-1/4 p-4 z-30 flex flex-col`}
       >
-        {/* Top Section: Login + Add Note */}
         <div className="flex justify-between items-center mb-6">
           <button
             onClick={() => router.push("/login")}
-            className=" flex items-center gap-2 text-sm font-medium bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
+            className="flex items-center gap-2 text-sm font-medium bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
           >
             <CircleUser />
             Login
           </button>
+
           <button
             onClick={handleAddNote}
             className="p-2 rounded-full hover:bg-gray-100"
@@ -145,6 +165,6 @@ function SideBar({ setSelectedNote, setSelectedPage }: any) {
       )}
     </>
   );
-}
+};
 
 export default SideBar;

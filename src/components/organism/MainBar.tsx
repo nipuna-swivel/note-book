@@ -1,8 +1,26 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 
-function MainBar({ selectedNote, selectedPage }: any) {
-  const [page, setPage] = useState(null);
+// Define the structure for a Page and Note
+interface Page {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface Note {
+  id: string;
+  title: string;
+  pages?: Page[];
+}
+
+interface MainBarProps {
+  selectedNote: Note | null;
+  selectedPage: Page | null;
+}
+
+const MainBar: React.FC<MainBarProps> = ({ selectedNote, selectedPage }) => {
+  const [page, setPage] = useState<Page | null>(null);
 
   useEffect(() => {
     setPage(selectedPage);
@@ -23,13 +41,17 @@ function MainBar({ selectedNote, selectedPage }: any) {
       </div>
     );
 
-  const handleChange = (e: any) => {
-    setPage({ ...page, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setPage((prev) => (prev ? { ...prev, [name]: value } : prev));
   };
 
   return (
     <div className="p-6 max-w-3xl mx-auto w-full">
       <h1 className="text-2xl font-bold mb-4">{selectedNote.title}</h1>
+
       <input
         type="text"
         name="title"
@@ -38,6 +60,7 @@ function MainBar({ selectedNote, selectedPage }: any) {
         className="w-full text-xl font-semibold mb-3 outline-none bg-transparent border-b border-gray-200 focus:border-blue-400 transition"
         placeholder="Page title..."
       />
+
       <textarea
         name="content"
         value={page.content}
@@ -47,6 +70,6 @@ function MainBar({ selectedNote, selectedPage }: any) {
       ></textarea>
     </div>
   );
-}
+};
 
 export default MainBar;

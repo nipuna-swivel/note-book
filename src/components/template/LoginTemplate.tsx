@@ -10,7 +10,7 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // 🔒 Replace this with real login logic
+   
     if (email && password) {
      
       router.push("/dashboard");

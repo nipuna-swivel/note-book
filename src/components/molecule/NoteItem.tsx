@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import PageItem from "../atom/PageItem";
 import NoteHeader from "../atom/NoteHeader";
 
-// Define types for Page and Note
+// types for Page and Note
 interface Page {
   id: number;
   title: string;
@@ -37,7 +37,9 @@ const NoteItem: React.FC<NoteItemProps> = ({
   handleDeletePage,
   setSelectedNote,
   setSelectedPage,
+
 }) => {
+
   return (
     <div className="border rounded-lg">
       {/* Note Header */}
@@ -64,7 +66,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
             </div>
           ))}
 
-          {/* Add Page Button */}
+          {/* Page Button */}
           <button
             onClick={() => handleAddPage(note.id)}
             className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 mt-2"
