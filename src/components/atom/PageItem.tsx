@@ -1,29 +1,9 @@
 "use client";
 import React from "react";
 import { Trash2, FileText } from "lucide-react";
+import { PageItemProps } from "@/types/Note";
 
-// Define types for Page and Note
-type Page = {
-  id: number;
-  title: string;
-};
-
-type Note = {
-  id: number;
-  title: string;
-  pages: Page[];
-};
-
-// Define props type for the PageItem component
-interface NoteItemProps {
-  page: Page;
-  note: Note;
-  setSelectedNote: (note: Note) => void;
-  setSelectedPage: (page: Page) => void;
-  handleDeletePage: (ids: { noteId: number; pageId: number }) => void;
-}
-
-const PageItem: React.FC<NoteItemProps> = ({
+const PageItem: React.FC<PageItemProps> = ({
   page,
   note,
   setSelectedNote,

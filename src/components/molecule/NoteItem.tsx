@@ -3,30 +3,7 @@ import React from "react";
 import { Plus } from "lucide-react";
 import PageItem from "../atom/PageItem";
 import NoteHeader from "../atom/NoteHeader";
-
-// types for Page and Note
-interface Page {
-  id: number;
-  title: string;
-}
-
-interface Note {
-  id: number;
-  title: string;
-  pages: Page[];
-}
-
-//types for component props
-interface NoteItemProps {
-  note: Note;
-  isExpanded: boolean;
-  toggleExpandNote: (noteId: number) => void;
-  handleAddPage: (noteId: number) => void;
-  handleDeleteNote: (noteId: number) => void;
-  handleDeletePage: (ids: { noteId: number; pageId: number }) => void;
-  setSelectedNote: (note: Note) => void;
-  setSelectedPage: (page: Page) => void;
-}
+import { NoteItemProps } from "@/types/Note";
 
 const NoteItem: React.FC<NoteItemProps> = ({
   note,
@@ -37,9 +14,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
   handleDeletePage,
   setSelectedNote,
   setSelectedPage,
-
 }) => {
-
   return (
     <div className="border rounded-lg">
       {/* Note Header */}
@@ -68,7 +43,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
 
           {/* Page Button */}
           <button
-            onClick={() => handleAddPage(note.id)}
+            onClick={() => handleAddPage(note.id != null ? Number(note.id) : 0)}
             className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 mt-2"
           >
             <Plus size={16} />

@@ -3,25 +3,7 @@ import React, { useState } from "react";
 import { Menu, Plus, CircleUser } from "lucide-react";
 import NoteList from "../molecule/NoteList";
 import { useRouter } from "next/navigation";
-
-// Define types for Page and Note
-interface Page {
-  id: number;
-  title: string;
-  content: string;
-}
-
-interface Note {
-  id: number;
-  title: string;
-  pages: Page[];
-}
-
-// Props expected by the SideBar component
-interface SideBarProps {
-  setSelectedNote: React.Dispatch<React.SetStateAction<Note | null>>;
-  setSelectedPage: React.Dispatch<React.SetStateAction<Page | null>>;
-}
+import { Note, SideBarProps } from "@/types/Note";
 
 const SideBar: React.FC<SideBarProps> = ({
   setSelectedNote,
@@ -38,7 +20,9 @@ const SideBar: React.FC<SideBarProps> = ({
       ],
     },
   ]);
-  const [expandedNoteId, setExpandedNoteId] = useState<number | null>(null);
+  const [expandedNoteId, setExpandedNoteId] = useState<number | string | null>(
+    null
+  );
 
   // Add a new note
   const handleAddNote = () => {
@@ -99,7 +83,7 @@ const SideBar: React.FC<SideBarProps> = ({
     setSelectedPage(null);
   };
 
-  // ⬇️ Expand / collapse a note
+  //Expand a note
   const toggleExpandNote = (id: number) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
   };

@@ -1,26 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, {useState } from "react";
 import SideBar from "../organism/SideBar";
 import MainBar from "../organism/MainBar";
-
-// Reuse shared types
-interface Page {
-  id: number;
-  title: string;
-  content: string;
-}
-
-interface Note {
-  id: number;
-  title: string;
-  pages: Page[];
-}
-
-
+import { Note, Page } from "@/types/Note";
 
 const NoteBook: React.FC = () => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [selectedPage, setSelectedPage] = useState<Page | null>(null);
+
+ 
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50">
@@ -36,3 +24,4 @@ const NoteBook: React.FC = () => {
 };
 
 export default NoteBook;
+
