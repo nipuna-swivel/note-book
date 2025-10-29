@@ -21,6 +21,8 @@ export interface NoteItemProps {
   setSelectedPage: (page: Page) => void;
 }
 
+
+
 export interface NoteHeaderProps {
   note: Note;
   isExpanded: boolean;

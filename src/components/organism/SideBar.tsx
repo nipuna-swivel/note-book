@@ -1,90 +1,75 @@
-"use client";
-import React, { useState } from "react";
-import { Menu, Plus, CircleUser } from "lucide-react";
-import NoteList from "../molecule/NoteList";
-import { useRouter } from "next/navigation";
-import { Note, SideBarProps } from "@/types/Note";
 
-const SideBar: React.FC<SideBarProps> = ({
+"use client";
+import React, { useEffect, useState } from "react";
+import { Menu, Plus, CircleUser } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  fetchNotebooks,
+  createNotebook,
+  deleteNotebook,
   setSelectedNote,
   setSelectedPage,
-}) => {
+} from "@/redux/notebookSlice";
+import NoteList from "../molecule/NoteList";
+import { Note } from "@/types/Note";
+
+const SideBar: React.FC = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [notes, setNotes] = useState<Note[]>([
-    {
-      id: 1,
-      title: "My First Note",
-      pages: [
-        { id: 1, title: "Page 1", content: "Welcome to your first note!" },
-      ],
-    },
-  ]);
-  const [expandedNoteId, setExpandedNoteId] = useState<number | string | null>(
-    null
+  const dispatch = useAppDispatch();
+
+  // ✅ Redux state
+  const { list: notebooks, selectedNote, selectedPage , loading } = useAppSelector(
+    (state) => state.notebooks
   );
 
-  // Add a new note
+  // ✅ Local UI state (just for sidebar open/close + expand tracking)
+  const [isOpen, setIsOpen] = useState(false);
+  const [expandedNoteId, setExpandedNoteId] = useState<string | null>(null);
+
+  // 🟢 Load notebooks on mount
+  useEffect(() => {
+    dispatch(fetchNotebooks());
+  }, [dispatch]);
+
+  // ➕ Create new notebook
   const handleAddNote = () => {
-    const newNote: Note = {
-      id: Date.now(),
-      title: `New Note ${notes.length + 1}`,
-      pages: [{ id: 1, title: "Page 1", content: "" }],
-    };
-    setNotes([...notes, newNote]);
-    setExpandedNoteId(newNote.id);
-    setSelectedNote(newNote);
-    setSelectedPage(newNote.pages[0]);
+    dispatch(createNotebook({ title: `New Note ${notebooks.length + 1}` }));
   };
 
-  // Add a new page inside a note
-  const handleAddPage = (noteId: number) => {
-    setNotes((prev) =>
-      prev.map((note) =>
-        note.id === noteId
-          ? {
-              ...note,
-              pages: [
-                ...note.pages,
-                {
-                  id: Date.now(),
-                  title: `Page ${note.pages.length + 1}`,
-                  content: "",
-                },
-              ],
-            }
-          : note
-      )
-    );
+  // 📄 Select a notebook and its first page
+  const handleSelectNote = (note: Note) => {
+    dispatch(setSelectedNote(note));
+    if (note.pages && note.pages.length > 0) {
+      dispatch(setSelectedPage(note.pages[0]));
+    } else {
+      dispatch(setSelectedPage(null));
+    }
   };
 
-  // Delete a note
-  const handleDeleteNote = (id: number) => {
-    setNotes(notes.filter((note) => note.id !== id));
-    setSelectedNote(null);
-    setSelectedPage(null);
+  // ➕ Add a new page (handled in page slice — optional later)
+  const handleAddPage = (noteId: string) => {
+    console.log("TODO: Add page via Redux thunk for note:", noteId);
   };
 
-  // Delete a page
+  // ❌ Delete notebook
+  const handleDeleteNote = (id: string) => {
+    dispatch(deleteNotebook(id));
+  };
+
+  // ❌ Delete page (optional placeholder for now)
   const handleDeletePage = ({
     noteId,
     pageId,
   }: {
-    noteId: number;
-    pageId: number;
+    noteId: string;
+    pageId: string;
   }) => {
-    setNotes((prev) =>
-      prev.map((note) =>
-        note.id === noteId
-          ? { ...note, pages: note.pages.filter((p) => p.id !== pageId) }
-          : note
-      )
-    );
-    setSelectedPage(null);
+    console.log(`TODO: delete page ${pageId} from note ${noteId}`);
   };
 
-  //Expand a note
-  const toggleExpandNote = (id: number) => {
+  // 🔽 Expand/Collapse notes
+  const toggleExpandNote = (id: string) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
   };
 
@@ -104,10 +89,10 @@ const SideBar: React.FC<SideBarProps> = ({
       <div
         className={`fixed md:static top-0 left-0 h-full md:h-screen bg-white border-r shadow-sm transform 
         transition-transform duration-300 ease-in-out 
-        ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-3/4 sm:w-2/5 md:w-1/4 p-4 z-30 flex flex-col`}
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 w-3/4 sm:w-2/5 md:w-1/4 p-4 z-30 flex flex-col`}
       >
+        {/* Header buttons */}
         <div className="flex justify-between items-center mb-6">
           <button
             onClick={() => router.push("/login")}
@@ -125,18 +110,26 @@ const SideBar: React.FC<SideBarProps> = ({
           </button>
         </div>
 
-        {/* Notes List */}
+        {/* Notebooks List */}
         <div className="flex-1 overflow-y-auto">
-          <NoteList
-            notes={notes}
-            expandedNoteId={expandedNoteId}
-            toggleExpandNote={toggleExpandNote}
-            handleAddPage={handleAddPage}
-            handleDeleteNote={handleDeleteNote}
-            handleDeletePage={handleDeletePage}
-            setSelectedNote={setSelectedNote}
-            setSelectedPage={setSelectedPage}
-          />
+          {loading ? (
+            <div className="text-center text-gray-500 mt-10">Loading...</div>
+          ) : notebooks.length === 0 ? (
+            <div className="text-center text-gray-400 mt-10">
+              No notebooks yet
+            </div>
+          ) : (
+            <NoteList
+              notes={notebooks}
+              expandedNoteId={expandedNoteId}
+              toggleExpandNote={toggleExpandNote}
+              handleAddPage={handleAddPage}
+              handleDeleteNote={handleDeleteNote}
+              handleDeletePage={handleDeletePage}
+              setSelectedNote={handleSelectNote}
+              setSelectedPage={(page) => dispatch(setSelectedPage(page))}
+            />
+          )}
         </div>
       </div>
 

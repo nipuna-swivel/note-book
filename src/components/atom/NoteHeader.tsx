@@ -2,17 +2,24 @@
 import React from "react";
 import { ChevronDown, ChevronRight, Trash2 } from "lucide-react";
 import { NoteHeaderProps } from "@/types/Note";
+import { deleteNotebook } from "@/redux/notebookSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
 const NoteHeader: React.FC<NoteHeaderProps> = ({
   note,
   isExpanded,
   toggleExpandNote,
-  handleDeleteNote,
 }) => {
+  const dispatch = useAppDispatch();
+
+  const handleDeleteNote = (id: string) => {
+    dispatch(deleteNotebook(id));
+  };
+
   return (
     <div
       className="flex justify-between items-center p-3 bg-gray-100 rounded-t-lg cursor-pointer hover:bg-gray-200 transition"
-      onClick={() => toggleExpandNote(note.id != null ? Number(note.id) : 0)}
+      onClick={() => toggleExpandNote(note._id)}
     >
       <div className="flex items-center gap-2">
         {isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
@@ -21,7 +28,7 @@ const NoteHeader: React.FC<NoteHeaderProps> = ({
       <button
         onClick={(e) => {
           e.stopPropagation();
-          handleDeleteNote(note.id != null ? Number(note.id) : 0);
+          handleDeleteNote(note._id);
         }}
         className="text-red-500 hover:text-red-700 transition"
       >
