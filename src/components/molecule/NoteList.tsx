@@ -1,37 +1,3 @@
-// import React from "react";
-// import NoteItem from "./NoteItem";
-// import { NoteListProps } from "@/types/Note";
-
-// const NoteList: React.FC<NoteListProps> = ({
-//   notes,
-//   expandedNoteId,
-//   toggleExpandNote,
-//   handleAddPage,
-//   handleDeleteNote,
-//   handleDeletePage,
-//   setSelectedNote,
-//   setSelectedPage,
-// }) => {
-//   return (
-//     <div className="space-y-2 overflow-y-auto h-[80vh]">
-//       {notes.map((note) => (
-//         <NoteItem
-//           key={note.id}
-//           note={note}
-//           isExpanded={expandedNoteId === note.id}
-//           toggleExpandNote={toggleExpandNote}
-//           handleAddPage={handleAddPage}
-//           handleDeleteNote={handleDeleteNote}
-//           handleDeletePage={handleDeletePage}
-//           setSelectedNote={setSelectedNote}
-//           setSelectedPage={setSelectedPage}
-//         />
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default NoteList;
 "use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
