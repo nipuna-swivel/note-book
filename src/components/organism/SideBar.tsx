@@ -52,10 +52,7 @@ const SideBar: React.FC = () => {
     console.log("TODO: Add page via Redux thunk for note:", noteId);
   };
 
-  // ❌ Delete notebook
-  const handleDeleteNote = (id: string) => {
-    dispatch(deleteNotebook(id));
-  };
+ 
 
   // ❌ Delete page (optional placeholder for now)
   const handleDeletePage = ({
@@ -123,8 +120,7 @@ const SideBar: React.FC = () => {
               notes={notebooks}
               expandedNoteId={expandedNoteId}
               toggleExpandNote={toggleExpandNote}
-              handleAddPage={handleAddPage}
-              handleDeleteNote={handleDeleteNote}
+              handleAddPage={handleAddPage}            
               handleDeletePage={handleDeletePage}
               setSelectedNote={handleSelectNote}
               setSelectedPage={(page) => dispatch(setSelectedPage(page))}

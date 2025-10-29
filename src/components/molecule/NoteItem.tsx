@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
+import React,{use, useEffect} from "react";
 import { Plus } from "lucide-react";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch,useAppSelector } from "@/redux/hooks";
 import { NoteItemProps } from "@/types/Note";
 import { setSelectedNote } from "@/redux/notebookSlice";
-import { setSelectedPage, createPage, deletePage } from "@/redux/pageSlice";
+import { setSelectedPage, createPage, deletePage ,fetchPages} from "@/redux/pageSlice";
 import PageItem from "../atom/PageItem";
 import NoteHeader from "../atom/NoteHeader";
 
@@ -12,9 +12,18 @@ const NoteItem: React.FC<NoteItemProps> = ({
   note,
   isExpanded,
   toggleExpandNote,
-  handleDeleteNote, // stays, handled via notebook thunk
+ 
 }) => {
   const dispatch = useAppDispatch();
+    const { list: pages, loading, error } = useAppSelector((state) => state.pages);
+
+  console.log("NoteBook-NoteItem",note._id)
+
+  useEffect(() => {
+    dispatch(fetchPages("690225aa2073dcdbac326051"));
+  }, []);
+
+  console.log("Pages",pages)
 
   // ✅ When note header clicked → select note + fetch pages
   const handleSelectNote = () => {
@@ -22,16 +31,27 @@ const NoteItem: React.FC<NoteItemProps> = ({
   };
 
   // ✅ Add new page in this note
+  // const handleAddPage = async () => {
+  //   if (!note._id) return;
+  //   dispatch(
+  //     createPage({
+  //       title: `Page ${note.pages?.length + 1 || 1}`,
+  //       content: "",
+  //       notebookId: note._id,
+  //     })
+  //   );
+  // };
+
   const handleAddPage = async () => {
+    console.log("add page clicked")
     if (!note._id) return;
-    dispatch(
+         dispatch(
       createPage({
-        title: `Page ${note.pages?.length + 1 || 1}`,
-        content: "",
-        notebookId: note._id,
+        notebookId: note._id, // this is the :id param for the backend
+        pageData: { title: `Page ${note.pages?.length + 1 || 1}`, content:"" },
       })
     );
-  };
+  }
 
   // ✅ Delete page from this note
   const handleDeletePage = (pageId: string) => {
@@ -46,14 +66,14 @@ const NoteItem: React.FC<NoteItemProps> = ({
           note={note}
           isExpanded={isExpanded}
           toggleExpandNote={toggleExpandNote}
-          handleDeleteNote={handleDeleteNote}
+  
         />
       </div>
 
       {/* Pages List */}
       {isExpanded && (
         <div className="p-3 space-y-2">
-          {note.pages?.map((page) => (
+          {pages?.map((page) => (
             <div key={page._id}>
               <PageItem
                 note={note}

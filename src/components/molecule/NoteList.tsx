@@ -17,6 +17,8 @@ const NoteList: React.FC = () => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
   };
 
+  console.log("NoteList-selectedpage",selectedPage)
+
   const handleNoteClick = (noteId: string) => {
     const note = notes.find((n) => n._id === noteId);
     if (note) {

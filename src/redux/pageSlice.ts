@@ -3,7 +3,7 @@ import { Page } from "../types/Note";
 
 interface PageState {
   list: Page[];
-  selectedPage: Page | null; // 
+  selectedPage: Page | null; //
   loading: boolean;
   error: string | null;
 }
@@ -21,23 +21,31 @@ const BASE_URL = "http://localhost:5000/api/pages";
 export const fetchPages = createAsyncThunk<Page[], string>(
   "pages/fetchByNotebook",
   async (notebookId) => {
-    const res = await fetch(`${BASE_URL}?notebookId=${notebookId}`);
+    const res = await fetch(`${BASE_URL}/notebook/${notebookId}`);
     if (!res.ok) throw new Error("Failed to fetch pages");
     return (await res.json()) as Page[];
   }
 );
 
 // ✅ Create a new page
-export const createPage = createAsyncThunk<Page, Partial<Page>>(
-  "pages/create",
-  async (pageData) => {
-    const res = await fetch(BASE_URL, {
+export const createPage = createAsyncThunk(
+  "pages/createPage",
+  async ({
+    notebookId,
+    pageData,
+  }: {
+    notebookId: string;
+    pageData: Omit<Page, "_id" | "notebookId">;
+  }) => {
+    const res = await fetch(`${BASE_URL}/${notebookId}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(pageData),
     });
-    if (!res.ok) throw new Error("Failed to create page");
-    return (await res.json()) as Page;
+    const data = await res.json();
+    return data; // new page
   }
 );
 
@@ -98,10 +106,16 @@ const pageSlice = createSlice({
       })
 
       // 🟢 Create
-      .addCase(createPage.fulfilled, (state, action) => {
-        const exists = state.list.some((p) => p._id === action.payload._id);
-        if (!exists) state.list.push(action.payload);
-        state.selectedPage = action.payload; // ✅ auto-select new page
+      .addCase(createPage.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createPage.fulfilled, (state, action: PayloadAction<Page>) => {
+        state.loading = false;
+        state.list.push(action.payload);
+      })
+      .addCase(createPage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to create page";
       })
 
       // 🟠 Update

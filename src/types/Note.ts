@@ -1,5 +1,6 @@
 export interface Page {
-  _id: string | number ; 
+  _id?: string;
+  notebookId: string;
   title: string;
   content: string;
 }
