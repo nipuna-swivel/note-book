@@ -1,11 +1,11 @@
 export interface Page {
-  id: string | number ; 
+  _id: string | number ; 
   title: string;
   content: string;
 }
 
 export interface Note {
-  id: string | number|null;
+  _id: string | number|null;
   title: string;
   pages: Page[];
 }

@@ -4,6 +4,7 @@ import SideBar from "../organism/SideBar";
 import MainBar from "../organism/MainBar";
 import { Note, Page } from "@/types/Note";
 
+
 const NoteBook: React.FC = () => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [selectedPage, setSelectedPage] = useState<Page | null>(null);
