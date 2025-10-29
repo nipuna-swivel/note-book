@@ -68,16 +68,28 @@ const NoteItem: React.FC<NoteItemProps> = ({
       {/* Pages List */}
       {isExpanded && (
         <div className="p-3 space-y-2">
-          {notebookPages.map((page) => (
-            <div key={page._id}>
-              <PageItem
-                note={note}
-                page={page}
-                onSelectPage={() => dispatch(setSelectedPage(page))}
-                onDeletePage={() => handleDeletePage(page._id)}
-              />
-            </div>
-          ))}
+          {loading ? (
+            <p className="text-sm text-gray-500 italic">Loading pages...</p>
+          ) : error ? (
+            <p className="text-sm text-red-500">Error loading pages</p>
+          ) : (
+            <>
+              {notebookPages.length > 0 ? (
+                notebookPages.map((page) => (
+                  <div key={page._id}>
+                    <PageItem
+                      note={note}
+                      page={page}
+                      onSelectPage={() => dispatch(setSelectedPage(page))}
+                      onDeletePage={() => handleDeletePage(page._id)}
+                    />
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-400">No pages yet.</p>
+              )}
+            </>
+          )}
 
           <button
             onClick={handleAddPage}
