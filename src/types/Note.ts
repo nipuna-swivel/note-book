@@ -1,5 +1,5 @@
 export interface Page {
-  _id?: string;
+  _id?: string |undefined;
   notebookId: string;
   title: string;
   content: string;

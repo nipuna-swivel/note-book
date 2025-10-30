@@ -10,6 +10,7 @@ const MainBar: React.FC = () => {
   const selectedPage = useAppSelector((state) => state.pages.selectedPage);
   const saving = useAppSelector((state) => state.pages.saving);
 
+  // local state (user typing)
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -23,18 +24,17 @@ const MainBar: React.FC = () => {
     }
   }, [selectedPage]);
 
-  useEffect(() => {
-    if (!selectedPage || !selectedPage._id) return; //
+  const handleBlur = () => {
+    console.log("Blur fired")
 
-    setTimeout(() => {
-      dispatch(
-        updatePage({
-          pageId: selectedPage._id,
-          updatedData: { title, content },
-        })
-      );
-    }, 400);
-  }, [title, content, selectedPage, dispatch]);
+
+    dispatch(
+      updatePage({
+        pageId: selectedPage._id,
+        data: { title, content },
+      })
+    );
+  };
 
   if (!selectedNote)
     return (
@@ -53,10 +53,9 @@ const MainBar: React.FC = () => {
 
   return (
     <div className="p-6 max-w-3xl mx-auto w-full">
-      {/* Note title */}
       <h1 className="text-2xl font-bold mb-2">{selectedNote.title}</h1>
 
-      {/* Save status */}
+      
       <div className="text-sm text-gray-500 mb-3 text-right">
         {saving ? (
           <span className="animate-pulse">Saving...</span>
@@ -76,6 +75,7 @@ const MainBar: React.FC = () => {
           setTitle(e.target.value);
           dispatch(updateSelectedPageLocal({ title: e.target.value }));
         }}
+        onBlur={handleBlur}
       />
 
       {/* Page content */}
@@ -88,6 +88,7 @@ const MainBar: React.FC = () => {
           setContent(e.target.value);
           dispatch(updateSelectedPageLocal({ content: e.target.value }));
         }}
+        onBlur={handleBlur}
       />
     </div>
   );

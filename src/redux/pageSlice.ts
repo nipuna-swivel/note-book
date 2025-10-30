@@ -54,9 +54,9 @@ export const createPage = createAsyncThunk(
 // Update a page (PUT)
 export const updatePage = createAsyncThunk<
   Page,
-  { id: string; data: Partial<Page> }
->("pages/update", async ({ id, data }) => {
-  const res = await fetch(`${BASE_URL}/${id}`, {
+  { pageId: string; data: Partial<Page> }
+>("pages/update", async ({ pageId, data }) => {
+  const res = await fetch(`${BASE_URL}/${pageId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
