@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Page } from "../types/Note";
+import { BASE_URL_PAGES } from "@/utils/constants";
 
 interface PageState {
   list: Page[];
-  selectedPage: Page | null; 
+  selectedPage: Page | null;
   loading: boolean;
   saving: boolean;
   error: string | null;
@@ -17,13 +18,11 @@ const initialState: PageState = {
   error: null,
 };
 
-const BASE_URL = "http://localhost:5000/api/pages";
-
 // Fetch all pages for a specific notebook
 export const fetchPages = createAsyncThunk<Page[], string>(
   "pages/fetchByNotebook",
   async (notebookId) => {
-    const res = await fetch(`${BASE_URL}/notebook/${notebookId}`);
+    const res = await fetch(`${BASE_URL_PAGES}/notebook/${notebookId}`);
     if (!res.ok) throw new Error("Failed to fetch pages");
     return (await res.json()) as Page[];
   }
@@ -39,7 +38,7 @@ export const createPage = createAsyncThunk(
     notebookId: string;
     pageData: Omit<Page, "_id" | "notebookId">;
   }) => {
-    const res = await fetch(`${BASE_URL}/${notebookId}`, {
+    const res = await fetch(`${BASE_URL_PAGES}/${notebookId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +46,7 @@ export const createPage = createAsyncThunk(
       body: JSON.stringify(pageData),
     });
     const data = await res.json();
-    return data; 
+    return data;
   }
 );
 
@@ -56,7 +55,7 @@ export const updatePage = createAsyncThunk<
   Page,
   { pageId: string; data: Partial<Page> }
 >("pages/update", async ({ pageId, data }) => {
-  const res = await fetch(`${BASE_URL}/${pageId}`, {
+  const res = await fetch(`${BASE_URL_PAGES}/${pageId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -69,7 +68,7 @@ export const updatePage = createAsyncThunk<
 export const deletePage = createAsyncThunk<string, string>(
   "pages/delete",
   async (id) => {
-    const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
+    const res = await fetch(`${BASE_URL_PAGES}/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("Failed to delete page");
     return id;
   }
@@ -158,6 +157,10 @@ const pageSlice = createSlice({
   },
 });
 
-export const { setSelectedPage, clearPages, clearSelectedPage ,updateSelectedPageLocal } =
-  pageSlice.actions;
+export const {
+  setSelectedPage,
+  clearPages,
+  clearSelectedPage,
+  updateSelectedPageLocal,
+} = pageSlice.actions;
 export default pageSlice.reducer;

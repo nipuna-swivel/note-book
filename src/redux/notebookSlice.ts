@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Note,Page } from "../types/Note";
+import { Note, Page } from "../types/Note";
+import { BASE_URL_NOTEBOOK } from "@/utils/constants";
 
 interface NotebookState {
   list: Note[];
@@ -17,13 +18,11 @@ const initialState: NotebookState = {
   error: null,
 };
 
-const BASE_URL = "http://localhost:5000/api/notebooks";
-
 // Async Thunks
 export const fetchNotebooks = createAsyncThunk<Note[]>(
   "notebooks/fetchAll",
   async () => {
-    const res = await fetch(BASE_URL);
+    const res = await fetch(BASE_URL_NOTEBOOK);
     return (await res.json()) as Note[];
   }
 );
@@ -31,7 +30,7 @@ export const fetchNotebooks = createAsyncThunk<Note[]>(
 export const createNotebook = createAsyncThunk<Note, { title: string }>(
   "notebooks/create",
   async (data) => {
-    const res = await fetch(BASE_URL, {
+    const res = await fetch(BASE_URL_NOTEBOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -40,10 +39,29 @@ export const createNotebook = createAsyncThunk<Note, { title: string }>(
   }
 );
 
+export const updateNotebook = createAsyncThunk(
+  "notebooks/updateNotebook",
+  async ({ notebookId, title }: { notebookId: string; title: string }) => {
+    const res = await fetch(`${BASE_URL_NOTEBOOK}/${notebookId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to update notebook");
+    }
+
+    return await res.json();
+  }
+);
+
 export const deleteNotebook = createAsyncThunk<string, string>(
   "notebooks/delete",
   async (id) => {
-    await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
+    await fetch(`${BASE_URL_NOTEBOOK}/${id}`, { method: "DELETE" });
     return id;
   }
 );
@@ -52,7 +70,7 @@ const notebookSlice = createSlice({
   name: "notebooks",
   initialState,
   reducers: {
-      //  Manage selected items globally
+    //  Manage selected items globally
     setSelectedNote: (state, action: PayloadAction<Note | null>) => {
       state.selectedNote = action.payload;
       state.selectedPage = null; // reset page when switching notebook
@@ -79,15 +97,15 @@ const notebookSlice = createSlice({
         state.selectedNote = action.payload;
         state.selectedPage = action.payload.pages?.[0] || null;
       })
-    //   .addCase(updateNotebook.fulfilled, (state, action) => {
-    //     const index = state.list.findIndex((n) => n._id === action.payload._id);
-    //     if (index !== -1) {
-    //       state.list[index] = action.payload;
-    //     }
-    //     if (state.selectedNote?._id === action.payload._id) {
-    //       state.selectedNote = action.payload; // keep current note updated
-    //     }
-    //   })
+      .addCase(updateNotebook.fulfilled, (state, action) => {
+        const index = state.list.findIndex((n) => n._id === action.payload._id);
+        if (index !== -1) {
+          state.list[index] = action.payload;
+        }
+        if (state.selectedNote?._id === action.payload._id) {
+          state.selectedNote = action.payload;
+        }
+      })
       .addCase(deleteNotebook.fulfilled, (state, action) => {
         state.list = state.list.filter((n) => n._id !== action.payload);
         if (state.selectedNote?._id === action.payload) {

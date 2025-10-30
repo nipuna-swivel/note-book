@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { updatePage, updateSelectedPageLocal } from "@/redux/pageSlice";
+import { updateNotebook } from "@/redux/notebookSlice";
 
 const MainBar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +14,8 @@ const MainBar: React.FC = () => {
   // local state (user typing)
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isEditingNoteTitle, setIsEditingNoteTitle] = useState(false);
+  const [noteTitle, setNoteTitle] = useState("");
 
   useEffect(() => {
     if (selectedPage) {
@@ -25,14 +28,24 @@ const MainBar: React.FC = () => {
   }, [selectedPage]);
 
   const handleBlur = () => {
-    console.log("Blur fired")
-
+    console.log("Blur fired");
 
     dispatch(
       updatePage({
         pageId: selectedPage._id,
         data: { title, content },
       })
+    );
+  };
+
+  const handleNoteTitleBlur = () => {
+    setIsEditingNoteTitle(false);
+
+    if (!selectedNote?._id) return;
+    if (noteTitle === selectedNote.title) return;
+
+    dispatch(
+      updateNotebook({ notebookId: selectedNote._id, title: noteTitle })
     );
   };
 
@@ -53,9 +66,26 @@ const MainBar: React.FC = () => {
 
   return (
     <div className="p-6 max-w-3xl mx-auto w-full">
-      <h1 className="text-2xl font-bold mb-2">{selectedNote.title}</h1>
+      {/* 🔹 Editable Notebook title */}
+      {isEditingNoteTitle ? (
+        <input
+          type="text"
+          value={noteTitle}
+          autoFocus
+          onChange={(e) => setNoteTitle(e.target.value)}
+          onBlur={handleNoteTitleBlur}
+          onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+          className="text-2xl font-bold mb-2 outline-none bg-transparent border-b border-gray-300 focus:border-blue-400 transition w-full"
+        />
+      ) : (
+        <h1
+          className="text-2xl font-bold mb-2 cursor-pointer hover:underline"
+          onClick={() => setIsEditingNoteTitle(true)}
+        >
+          {selectedNote.title}
+        </h1>
+      )}
 
-      
       <div className="text-sm text-gray-500 mb-3 text-right">
         {saving ? (
           <span className="animate-pulse">Saving...</span>
