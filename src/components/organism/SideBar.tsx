@@ -6,8 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchNotebooks,
-  createNotebook,
-  deleteNotebook,
+  createNotebook,  
   setSelectedNote,
   setSelectedPage,
 } from "@/redux/notebookSlice";

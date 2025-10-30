@@ -9,6 +9,7 @@ import {
   createPage,
   deletePage,
   fetchPages,
+  clearSelectedPage 
 } from "@/redux/pageSlice";
 import PageItem from "../atom/PageItem";
 import NoteHeader from "../atom/NoteHeader";
@@ -28,6 +29,9 @@ const NoteItem: React.FC<NoteItemProps> = ({
   useEffect(() => {
     if (isExpanded && note._id) {
       dispatch(fetchPages(note._id)); // fetch pages only for this notebook
+    }
+    else if (!isExpanded) {
+      dispatch(clearSelectedPage());
     }
   }, [isExpanded, note._id, dispatch]);
 

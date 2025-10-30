@@ -82,6 +82,11 @@ const pageSlice = createSlice({
       state.selectedPage = action.payload;
     },
 
+    //clear pages when switching pages
+    clearSelectedPage: (state) => {
+      state.selectedPage = null;
+    },
+
     // ✅ Clear pages when switching notebook
     clearPages: (state) => {
       state.list = [];
@@ -139,5 +144,6 @@ const pageSlice = createSlice({
   },
 });
 
-export const { setSelectedPage, clearPages } = pageSlice.actions;
+export const { setSelectedPage, clearPages, clearSelectedPage } =
+  pageSlice.actions;
 export default pageSlice.reducer;
