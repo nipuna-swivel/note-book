@@ -5,19 +5,21 @@ interface PageState {
   list: Page[];
   selectedPage: Page | null; //
   loading: boolean;
+  saving: boolean;
   error: string | null;
 }
 
 const initialState: PageState = {
   list: [],
   selectedPage: null,
+  saving: false,
   loading: false,
   error: null,
 };
 
 const BASE_URL = "http://localhost:5000/api/pages";
 
-// ✅ Fetch all pages for a specific notebook
+// Fetch all pages for a specific notebook
 export const fetchPages = createAsyncThunk<Page[], string>(
   "pages/fetchByNotebook",
   async (notebookId) => {
@@ -27,7 +29,7 @@ export const fetchPages = createAsyncThunk<Page[], string>(
   }
 );
 
-// ✅ Create a new page
+// Create a new page
 export const createPage = createAsyncThunk(
   "pages/createPage",
   async ({
@@ -49,7 +51,7 @@ export const createPage = createAsyncThunk(
   }
 );
 
-// ✅ Update a page (PUT)
+// Update a page (PUT)
 export const updatePage = createAsyncThunk<
   Page,
   { id: string; data: Partial<Page> }
@@ -63,7 +65,7 @@ export const updatePage = createAsyncThunk<
   return (await res.json()) as Page;
 });
 
-// ✅ Delete a page
+// Delete a page
 export const deletePage = createAsyncThunk<string, string>(
   "pages/delete",
   async (id) => {
@@ -77,7 +79,7 @@ const pageSlice = createSlice({
   name: "pages",
   initialState,
   reducers: {
-    // ✅ Select / Deselect page
+    // Select / Deselect page
     setSelectedPage: (state, action: PayloadAction<Page | null>) => {
       state.selectedPage = action.payload;
     },
@@ -87,17 +89,24 @@ const pageSlice = createSlice({
       state.selectedPage = null;
     },
 
-    // ✅ Clear pages when switching notebook
+    // Clear pages when switching notebook
     clearPages: (state) => {
       state.list = [];
       state.selectedPage = null;
       state.error = null;
       state.loading = false;
     },
+
+    //update selected page locally
+    updateSelectedPageLocal: (state, action) => {
+      if (state.selectedPage) {
+        state.selectedPage = { ...state.selectedPage, ...action.payload };
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
-      // 🟡 Fetch
+      // Fetch
       .addCase(fetchPages.pending, (state) => {
         state.loading = true;
       })
@@ -110,7 +119,7 @@ const pageSlice = createSlice({
         state.error = action.error.message ?? "Failed to load pages";
       })
 
-      // 🟢 Create
+      // Create
       .addCase(createPage.pending, (state) => {
         state.loading = true;
       })
@@ -123,18 +132,23 @@ const pageSlice = createSlice({
         state.error = action.error.message || "Failed to create page";
       })
 
-      // 🟠 Update
+      //  Update
+      .addCase(updatePage.pending, (state) => {
+        state.saving = true;
+      })
       .addCase(updatePage.fulfilled, (state, action) => {
-        const index = state.list.findIndex((p) => p._id === action.payload._id);
-        if (index !== -1) {
-          state.list[index] = action.payload;
-        }
+        state.saving = false;
+        const idx = state.list.findIndex((p) => p._id === action.payload._id);
+        if (idx !== -1) state.list[idx] = action.payload;
         if (state.selectedPage?._id === action.payload._id) {
-          state.selectedPage = action.payload; // ✅ keep it in sync
+          state.selectedPage = action.payload;
         }
       })
+      .addCase(updatePage.rejected, (state) => {
+        state.saving = false;
+      })
 
-      // 🔴 Delete
+      //  Delete
       .addCase(deletePage.fulfilled, (state, action) => {
         state.list = state.list.filter((p) => p._id !== action.payload);
         if (state.selectedPage?._id === action.payload) {
@@ -144,6 +158,6 @@ const pageSlice = createSlice({
   },
 });
 
-export const { setSelectedPage, clearPages, clearSelectedPage } =
+export const { setSelectedPage, clearPages, clearSelectedPage ,updateSelectedPageLocal } =
   pageSlice.actions;
 export default pageSlice.reducer;

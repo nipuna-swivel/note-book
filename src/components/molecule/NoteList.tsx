@@ -23,7 +23,7 @@ const NoteList: React.FC = () => {
     const note = notes.find((n) => n._id === noteId);
     if (note) {
       dispatch(setSelectedNote(note));
-      dispatch(fetchPages(note._id)); // ✅ load that notebook’s pages
+      dispatch(fetchPages(note._id)); 
     }
   };
 

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { Menu, Plus, CircleUser } from "lucide-react";
@@ -6,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchNotebooks,
-  createNotebook,  
+  createNotebook,
   setSelectedNote,
   setSelectedPage,
 } from "@/redux/notebookSlice";
@@ -17,26 +16,24 @@ const SideBar: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  // ✅ Redux state
-  const { list: notebooks, selectedNote, selectedPage , loading } = useAppSelector(
-    (state) => state.notebooks
-  );
+  const {
+    list: notebooks,
+    selectedNote,
+    selectedPage,
+    loading,
+  } = useAppSelector((state) => state.notebooks);
 
-  // ✅ Local UI state (just for sidebar open/close + expand tracking)
   const [isOpen, setIsOpen] = useState(false);
   const [expandedNoteId, setExpandedNoteId] = useState<string | null>(null);
 
-  // 🟢 Load notebooks on mount
   useEffect(() => {
     dispatch(fetchNotebooks());
   }, [dispatch]);
 
-  // ➕ Create new notebook
   const handleAddNote = () => {
     dispatch(createNotebook({ title: `New Note ${notebooks.length + 1}` }));
   };
 
-  // 📄 Select a notebook and its first page
   const handleSelectNote = (note: Note) => {
     dispatch(setSelectedNote(note));
     if (note.pages && note.pages.length > 0) {
@@ -46,14 +43,10 @@ const SideBar: React.FC = () => {
     }
   };
 
-  // ➕ Add a new page (handled in page slice — optional later)
   const handleAddPage = (noteId: string) => {
     console.log("TODO: Add page via Redux thunk for note:", noteId);
   };
 
- 
-
-  // ❌ Delete page (optional placeholder for now)
   const handleDeletePage = ({
     noteId,
     pageId,
@@ -64,7 +57,6 @@ const SideBar: React.FC = () => {
     console.log(`TODO: delete page ${pageId} from note ${noteId}`);
   };
 
-  // 🔽 Expand/Collapse notes
   const toggleExpandNote = (id: string) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
   };
@@ -119,7 +111,7 @@ const SideBar: React.FC = () => {
               notes={notebooks}
               expandedNoteId={expandedNoteId}
               toggleExpandNote={toggleExpandNote}
-              handleAddPage={handleAddPage}            
+              handleAddPage={handleAddPage}
               handleDeletePage={handleDeletePage}
               setSelectedNote={handleSelectNote}
               setSelectedPage={(page) => dispatch(setSelectedPage(page))}

@@ -28,7 +28,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
 
   useEffect(() => {
     if (isExpanded && note._id) {
-      dispatch(fetchPages(note._id)); // fetch pages only for this notebook
+      dispatch(fetchPages(note._id)); 
     }
     else if (!isExpanded) {
       dispatch(clearSelectedPage());
@@ -37,7 +37,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
 
   const notebookPages = pages.filter((page) => page.notebookId === note._id);
 
-  // ✅ When note header clicked → select note + fetch pages
+  
   const handleSelectNote = () => {
     dispatch(setSelectedNote(note._id));
   };
@@ -47,13 +47,12 @@ const NoteItem: React.FC<NoteItemProps> = ({
     if (!note._id) return;
     dispatch(
       createPage({
-        notebookId: note._id, // this is the :id param for the backend
+        notebookId: note._id, 
         pageData: { title: `Page ${note.pages?.length + 1 || 1}`, content: "" },
       })
     );
   };
 
-  // ✅ Delete page from this note
   const handleDeletePage = (pageId: string) => {
     dispatch(deletePage(pageId));
   };

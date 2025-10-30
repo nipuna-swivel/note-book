@@ -52,7 +52,7 @@ const notebookSlice = createSlice({
   name: "notebooks",
   initialState,
   reducers: {
-      // ✅ Manage selected items globally
+      //  Manage selected items globally
     setSelectedNote: (state, action: PayloadAction<Note | null>) => {
       state.selectedNote = action.payload;
       state.selectedPage = null; // reset page when switching notebook

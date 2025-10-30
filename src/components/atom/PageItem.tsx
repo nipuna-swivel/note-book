@@ -9,13 +9,6 @@ import { setSelectedPage, deletePage ,fetchPages} from "@/redux/pageSlice";
 const PageItem: React.FC<PageItemProps> = ({ page, note }) => {
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   console.log(note._id)
-  //   // Fetch pages when the component mounts
-  //   if (note._id) {
-  //     dispatch(fetchPages(note._id));
-  //   }
-  // }, []);
 
   const handleSelect = () => {
     dispatch(setSelectedNote(note));
