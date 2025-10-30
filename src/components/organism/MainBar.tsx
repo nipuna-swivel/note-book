@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { updatePage, updateSelectedPageLocal } from "@/redux/pageSlice";
 
-
 const MainBar: React.FC = () => {
   const dispatch = useAppDispatch();
 
@@ -14,8 +13,6 @@ const MainBar: React.FC = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-
- 
   useEffect(() => {
     if (selectedPage) {
       setTitle(selectedPage.title || "");
@@ -26,23 +23,18 @@ const MainBar: React.FC = () => {
     }
   }, [selectedPage]);
 
+  useEffect(() => {
+    if (!selectedPage || !selectedPage._id) return; //
 
-useEffect(() => {
-  if (!selectedPage || !selectedPage._id) return; // 
-
-  setTimeout(() => {
-    dispatch(
-      updatePage({
-        pageId: selectedPage._id,
-        updatedData: { title, content },
-      })
-    );
-  
-  }, 400);
-
-  
-}, [title, content, selectedPage, dispatch]);
-
+    setTimeout(() => {
+      dispatch(
+        updatePage({
+          pageId: selectedPage._id,
+          updatedData: { title, content },
+        })
+      );
+    }, 400);
+  }, [title, content, selectedPage, dispatch]);
 
   if (!selectedNote)
     return (

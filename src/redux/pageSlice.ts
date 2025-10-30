@@ -3,7 +3,7 @@ import { Page } from "../types/Note";
 
 interface PageState {
   list: Page[];
-  selectedPage: Page | null; //
+  selectedPage: Page | null; 
   loading: boolean;
   saving: boolean;
   error: string | null;
@@ -47,7 +47,7 @@ export const createPage = createAsyncThunk(
       body: JSON.stringify(pageData),
     });
     const data = await res.json();
-    return data; // new page
+    return data; 
   }
 );
 
