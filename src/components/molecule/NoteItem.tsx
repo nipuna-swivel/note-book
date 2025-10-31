@@ -4,13 +4,7 @@ import { Plus } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { NoteItemProps } from "@/types/Note";
 import { setSelectedNote } from "@/redux/notebookSlice";
-import {
-  setSelectedPage,
-  createPage,
-  deletePage,
-  fetchPages,
-  clearSelectedPage,
-} from "@/redux/pageSlice";
+import { createPage, fetchPages, clearSelectedPage } from "@/redux/pageSlice";
 import PageItem from "../atom/PageItem";
 import NoteHeader from "../atom/NoteHeader";
 
@@ -51,10 +45,6 @@ const NoteItem: React.FC<NoteItemProps> = ({
     );
   };
 
-  const handleDeletePage = (pageId: string) => {
-    dispatch(deletePage(pageId));
-  };
-
   return (
     <div className="border rounded-lg">
       {/* Note Header */}
@@ -78,12 +68,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
               {notebookPages.length > 0 ? (
                 notebookPages.map((page) => (
                   <div key={page._id}>
-                    <PageItem
-                      note={note}
-                      page={page}
-                      onSelectPage={() => dispatch(setSelectedPage(page))}
-                      onDeletePage={() => handleDeletePage(page._id)}
-                    />
+                    <PageItem note={note} page={page} />
                   </div>
                 ))
               ) : (

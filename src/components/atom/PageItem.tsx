@@ -1,14 +1,13 @@
 "use client";
-import React,{use, useEffect} from "react";
+import React, { use, useEffect } from "react";
 import { Trash2, FileText } from "lucide-react";
 import { PageItemProps } from "@/types/Note";
 import { useAppDispatch } from "@/redux/hooks";
 import { setSelectedNote } from "@/redux/notebookSlice";
-import { setSelectedPage, deletePage ,fetchPages} from "@/redux/pageSlice";
+import { setSelectedPage, deletePage, fetchPages } from "@/redux/pageSlice";
 
 const PageItem: React.FC<PageItemProps> = ({ page, note }) => {
   const dispatch = useAppDispatch();
-
 
   const handleSelect = () => {
     dispatch(setSelectedNote(note));

@@ -6,7 +6,7 @@ export interface Page {
 }
 
 export interface Note {
-  _id: string | number|null;
+  _id: string |null;
   title: string;
   pages: Page[];
 }
@@ -28,16 +28,16 @@ export interface NoteHeaderProps {
   note: Note;
   isExpanded: boolean;
   toggleExpandNote: (noteId: number) => void;
-  handleDeleteNote: (noteId: number) => void;
+//  handleDeleteNote: (noteId: number) => void;
 }
 
 
 export interface PageItemProps {
   page: Page;
   note: Note;
-  setSelectedNote: (note: Note) => void;
-  setSelectedPage: (page: Page) => void;
-  handleDeletePage: (ids: { noteId: number; pageId: number }) => void;
+ // setSelectedNote: (note: Note) => void;
+//  setSelectedPage: (page: Page) => void;
+//  handleDeletePage: (ids: { noteId: number; pageId: number }) => void;
 }
 
 export interface NoteListProps {
