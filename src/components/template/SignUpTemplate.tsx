@@ -1,12 +1,14 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { registerUser } from "@/redux/authSlice";
 
 export default function SignUpTemplate() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -19,8 +21,8 @@ export default function SignUpTemplate() {
   const handleSubmit = (e:any) => {
     e.preventDefault();
 
-    const { name, email, password, confirmPassword } = formData;
-    if (!name || !email || !password || !confirmPassword) {
+    const { username, email, password, confirmPassword } = formData;
+    if (!username || !email || !password || !confirmPassword) {
       alert("Please fill in all fields");
       return;
     }
@@ -29,8 +31,8 @@ export default function SignUpTemplate() {
       return;
     }
 
-    // signup API call
-    alert("Account created successfully!");
+     dispatch(registerUser({username, email, password}));
+ 
     router.push("/login");
   };
 
@@ -38,7 +40,7 @@ export default function SignUpTemplate() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
-          Create Account ✨
+          Create User
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -48,8 +50,8 @@ export default function SignUpTemplate() {
             </label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               placeholder="John Doe"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"

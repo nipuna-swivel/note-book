@@ -2,11 +2,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import notebookReducer from "./notebookSlice";
 import pageReducer from "./pageSlice";
+import authReducer from "./authSlice";
 
 export const store = configureStore({
   reducer: {
     notebooks: notebookReducer,
     pages: pageReducer,
+    auth: authReducer,
   },
 });
 

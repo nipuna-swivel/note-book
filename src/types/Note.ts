@@ -60,3 +60,17 @@ export interface MainBarProps {
   selectedNote: Note | null;
   selectedPage: Page | null;
 }
+
+export interface User {
+  _id: string;
+  username: string;
+  email: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+}
+
