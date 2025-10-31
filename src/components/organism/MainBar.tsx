@@ -65,7 +65,6 @@ const MainBar: React.FC = () => {
 
   return (
     <div className="p-6 max-w-3xl mx-auto w-full">
-      {/* 🔹 Editable Notebook title */}
       {isEditingNoteTitle ? (
         <input
           type="text"

@@ -3,24 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Menu, Plus, CircleUser } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import {
-  fetchNotebooks,
-  createNotebook,
-  setSelectedNote,
-  setSelectedPage,
-} from "@/redux/notebookSlice";
+import { fetchNotebooks, createNotebook } from "@/redux/notebookSlice";
 import NoteList from "../molecule/NoteList";
-import { Note } from "@/types/Note";
 
 const SideBar: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-
-  const {
-    list: notebooks,
-    loading,
-  } = useAppSelector((state) => state.notebooks);
-
+  const { list: notebooks, loading } = useAppSelector(
+    (state) => state.notebooks
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [expandedNoteId, setExpandedNoteId] = useState<string | null>(null);
 
@@ -31,8 +22,6 @@ const SideBar: React.FC = () => {
   const handleAddNote = () => {
     dispatch(createNotebook({ title: `New Note ${notebooks.length + 1}` }));
   };
-
-
 
   const toggleExpandNote = (id: string) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
@@ -84,10 +73,9 @@ const SideBar: React.FC = () => {
               No notebooks yet
             </div>
           ) : (
-            <NoteList           
+            <NoteList
               expandedNoteId={expandedNoteId}
-              toggleExpandNote={toggleExpandNote}        
-          
+              toggleExpandNote={toggleExpandNote}
             />
           )}
         </div>

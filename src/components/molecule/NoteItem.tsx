@@ -14,6 +14,7 @@ import {
 import PageItem from "../atom/PageItem";
 import NoteHeader from "../atom/NoteHeader";
 
+
 const NoteItem: React.FC<NoteItemProps> = ({
   note,
   isExpanded,
@@ -25,6 +26,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
     loading,
     error,
   } = useAppSelector((state) => state.pages);
+ 
 
   useEffect(() => {
     if (isExpanded && note._id) {
