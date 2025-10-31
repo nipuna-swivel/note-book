@@ -18,8 +18,6 @@ const SideBar: React.FC = () => {
 
   const {
     list: notebooks,
-    selectedNote,
-    selectedPage,
     loading,
   } = useAppSelector((state) => state.notebooks);
 
@@ -34,28 +32,7 @@ const SideBar: React.FC = () => {
     dispatch(createNotebook({ title: `New Note ${notebooks.length + 1}` }));
   };
 
-  const handleSelectNote = (note: Note) => {
-    dispatch(setSelectedNote(note));
-    if (note.pages && note.pages.length > 0) {
-      dispatch(setSelectedPage(note.pages[0]));
-    } else {
-      dispatch(setSelectedPage(null));
-    }
-  };
 
-  const handleAddPage = (noteId: string) => {
-    console.log("TODO: Add page via Redux thunk for note:", noteId);
-  };
-
-  const handleDeletePage = ({
-    noteId,
-    pageId,
-  }: {
-    noteId: string;
-    pageId: string;
-  }) => {
-    console.log(`TODO: delete page ${pageId} from note ${noteId}`);
-  };
 
   const toggleExpandNote = (id: string) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
@@ -107,14 +84,10 @@ const SideBar: React.FC = () => {
               No notebooks yet
             </div>
           ) : (
-            <NoteList
-              notes={notebooks}
+            <NoteList           
               expandedNoteId={expandedNoteId}
-              toggleExpandNote={toggleExpandNote}
-              handleAddPage={handleAddPage}
-              handleDeletePage={handleDeletePage}
-              setSelectedNote={handleSelectNote}
-              setSelectedPage={(page) => dispatch(setSelectedPage(page))}
+              toggleExpandNote={toggleExpandNote}        
+          
             />
           )}
         </div>

@@ -6,7 +6,6 @@ import { updateNotebook } from "@/redux/notebookSlice";
 
 const MainBar: React.FC = () => {
   const dispatch = useAppDispatch();
-
   const selectedNote = useAppSelector((state) => state.notebooks.selectedNote);
   const selectedPage = useAppSelector((state) => state.pages.selectedPage);
   const saving = useAppSelector((state) => state.pages.saving);
