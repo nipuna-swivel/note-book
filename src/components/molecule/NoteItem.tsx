@@ -9,11 +9,10 @@ import {
   createPage,
   deletePage,
   fetchPages,
-  clearSelectedPage 
+  clearSelectedPage,
 } from "@/redux/pageSlice";
 import PageItem from "../atom/PageItem";
 import NoteHeader from "../atom/NoteHeader";
-
 
 const NoteItem: React.FC<NoteItemProps> = ({
   note,
@@ -26,20 +25,17 @@ const NoteItem: React.FC<NoteItemProps> = ({
     loading,
     error,
   } = useAppSelector((state) => state.pages);
- 
 
   useEffect(() => {
     if (isExpanded && note._id) {
-      dispatch(fetchPages(note._id)); 
-    }
-    else if (!isExpanded) {
+      dispatch(fetchPages(note._id));
+    } else if (!isExpanded) {
       dispatch(clearSelectedPage());
     }
   }, [isExpanded, note._id, dispatch]);
 
   const notebookPages = pages.filter((page) => page.notebookId === note._id);
 
-  
   const handleSelectNote = () => {
     dispatch(setSelectedNote(note._id));
   };
@@ -49,7 +45,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
     if (!note._id) return;
     dispatch(
       createPage({
-        notebookId: note._id, 
+        notebookId: note._id,
         pageData: { title: `Page ${note.pages?.length + 1 || 1}`, content: "" },
       })
     );

@@ -8,22 +8,26 @@ import { setSelectedPage, fetchPages } from "@/redux/pageSlice";
 
 const NoteList: React.FC = () => {
   const dispatch = useDispatch();
-  const { list: notes, loading } = useSelector((state: RootState) => state.notebooks);
+  const { list: notes, loading } = useSelector(
+    (state: RootState) => state.notebooks
+  );
   const { selectedNote } = useSelector((state: RootState) => state.notebooks);
   const { selectedPage } = useSelector((state: RootState) => state.pages);
-  const [expandedNoteId, setExpandedNoteId] = React.useState<number | string | null>(null);
+  const [expandedNoteId, setExpandedNoteId] = React.useState<
+    number | string | null
+  >(null);
 
   const toggleExpandNote = (id: number | string) => {
     setExpandedNoteId(expandedNoteId === id ? null : id);
   };
 
-  console.log("NoteList-selectedpage",selectedPage)
+  console.log("NoteList-selectedpage", selectedPage);
 
   const handleNoteClick = (noteId: string) => {
     const note = notes.find((n) => n._id === noteId);
     if (note) {
       dispatch(setSelectedNote(note));
-      dispatch(fetchPages(note._id)); 
+      dispatch(fetchPages(note._id));
     }
   };
 
@@ -33,7 +37,7 @@ const NoteList: React.FC = () => {
 
   return (
     <div className="space-y-2 overflow-y-auto h-[80vh]">
-      {notes.map((note,index) => (
+      {notes.map((note, index) => (
         <NoteItem
           key={note._id || index}
           note={note}
@@ -48,4 +52,3 @@ const NoteList: React.FC = () => {
 };
 
 export default NoteList;
-
