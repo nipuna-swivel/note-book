@@ -31,7 +31,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
   const notebookPages = pages.filter((page) => page.notebookId === note._id);
 
   const handleSelectNote = () => {
-    dispatch(setSelectedNote(note._id));
+    dispatch(setSelectedNote(note._id ? note : null));
   };
 
   const handleAddPage = async () => {
