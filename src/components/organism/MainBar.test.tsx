@@ -71,7 +71,7 @@ describe("MainBar Component", () => {
 
     render(<MainBar />);
 
-    expect(screen.getByDisplayValue("Note A")).not.toBeNull(); // h1 text
+    expect(screen.getByDisplayValue("Note A")).not.toBeNull(); 
     expect(screen.getByDisplayValue("Page A")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Hello")).toBeInTheDocument();
   });
